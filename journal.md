@@ -41,3 +41,11 @@ Le script `moteurjoystick.py` permet de faire tourner le moteur en sens horaire 
 > Julien recommande d'aplatir les câbles du montage afin de limiter la quantité de bruit électrique produit par le circuit, qui cause de l'interférence.
 
 &nbsp;
+
+# Vendredi 18/03/2022
+
+## Servomoteur
+
+J'ai commencé le cours en suivant le tutoriel Freenove au chapitre 15 afin d'obtenir un montage et le script `servo.py` qui fait tourner mon servomoteur de 0 à 180 degrés allez-retour.
+
+J'ai ensuite inséré les segments de codes du servomoteur dans le script `servomoteurjoystick.py` et l'ai adapté pour contrôler le servomoteur et le moteur DC en même temps avec le joystick.
