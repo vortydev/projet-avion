@@ -41,6 +41,7 @@ def setup():
 
     # setup joystick
     GPIO.setup(joystickZ, GPIO.IN, GPIO.PUD_UP)
+    GPIO.add_event_detect(joystickZ, GPIO.RISING, callback=joystick_callback)
 
     # setup DC motor
     GPIO.setup(motorRPin1, GPIO.OUT)
@@ -58,6 +59,9 @@ def setup():
     servoPWM = GPIO.PWM(servoPin, 50)   # set frequence to 50Hz
     motorPWM.start(0)
     servoPWM.start(0)
+
+def joystick_callback(channel):
+    print("Controls toggled")
 
 def motor(ADC):
     value = ADC - 128
@@ -82,10 +86,20 @@ def servo(angle):
     # print(angle, map(angle, 0, 255, 0, 180), map(map(angle, 0, 255, 0, 180), 0, 180, SERVO_MIN_DUTY, SERVO_MAX_DUTY))
 
 def loop():
+    lockedControls = False
+    yVal = 128
+    xVal = 90
+
     while (True):
         zVal = GPIO.input(joystickZ)
-        yVal = adc.analogRead(0)
-        xVal = adc.analogRead(1)
+
+        if GPIO.event_detected(joystickZ):
+            lockedControls = not lockedControls
+        
+        if not lockedControls:
+            yVal = adc.analogRead(0)
+            xVal = adc.analogRead(1)
+        
         print("Value X: %d, Value Y: %d, Value Z: %d"%(xVal, yVal, zVal))
 
         servo(xVal)
@@ -95,9 +109,9 @@ def loop():
 
 # cleanup sequence
 def destroy():
-    adc.close()
     motorPWM.stop()
     servoPWM.stop()
+    adc.close()
     GPIO.cleanup()
 
 # main
