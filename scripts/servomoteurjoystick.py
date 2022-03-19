@@ -1,13 +1,14 @@
 # importations
 import RPi.GPIO as GPIO
 from time import sleep
+import time
 from ADCDevice import *
 
 # create adc object
 adc = ADCDevice()
 
 # define joystick pins
-joystickZ = 13
+joystickZ = 21
 
 # define L293D pins (DC motor)
 motorRPin1 = 27
@@ -78,32 +79,46 @@ def motor(ADC):
         GPIO.output(motorRPin2, GPIO.LOW)
         # print("Motor stopped")
 
-    motorPWM.start(map(abs(value), 0, 128, 0, 100))
-    # print("The PWM duty cycle is %d%%\n"%(abs(value)*100/127))
+    val = map(abs(value), 0, 128, 0, 100)
+    motorPWM.start(val)
+    return round(value)
 
 def servo(angle):
-    servoPWM.ChangeDutyCycle(map(map(angle, 0, 255, 0, 180), 0, 180, SERVO_MIN_DUTY, SERVO_MAX_DUTY))   # map the angle to duty cycle and output it
-    # print(angle, map(angle, 0, 255, 0, 180), map(map(angle, 0, 255, 0, 180), 0, 180, SERVO_MIN_DUTY, SERVO_MAX_DUTY))
+    value = map(map(angle, 0, 255, 0, 180), 0, 180, SERVO_MIN_DUTY, SERVO_MAX_DUTY)
+    servoPWM.ChangeDutyCycle(value)   # map the angle to duty cycle and output it
+    return round(map(value, SERVO_MIN_DUTY, SERVO_MAX_DUTY, 0, 100))
 
 def loop():
-    lockedControls = False
-    yVal = 128
-    xVal = 90
+    lockedControls = False  # start with locked controls
+    yVal = 128              # motor neutral state
+    xVal = 128              # servo middle angle
+    zStamp = time.localtime()
+    zBuffer = time.localtime()
+
 
     while (True):
         zVal = GPIO.input(joystickZ)
 
+        zStamp = time.localtime()
         if GPIO.event_detected(joystickZ):
-            lockedControls = not lockedControls
+            if (time.asctime(zStamp) > time.asctime(zBuffer)):
+                lockedControls = not lockedControls
+                zBuffer = time.localtime()
+            
+        
         
         if not lockedControls:
             yVal = adc.analogRead(0)
             xVal = adc.analogRead(1)
+        else:
+            yVal = 128
+            xVal = 128
         
-        print("Value X: %d, Value Y: %d, Value Z: %d"%(xVal, yVal, zVal))
+        print("X: {}, Y: {}, Z: {}".format(xVal, yVal, zVal))
 
-        servo(xVal)
-        motor(yVal)
+        motor(yVal)   # runs the update
+        servo(xVal)   # runs the update
+        print("Locked controls: {}".format(lockedControls))
 
         sleep(0.01)
 

@@ -65,5 +65,14 @@ J'ai commencé à préparer pour la *"greater picture"* en créant les fichiers:
 > ```python
 > # importations
 > import RPi.GPIO as GPIO
+> from date import sleep
 > import etat.py
 > ```
+
+&nbsp;
+
+# Samedi 19/03/2022
+
+J'ai *tweaké* les contrôles du joystick dans [servomoteurjoystick.py](./scripts/servomoteurjoystick.py) pour que les contrôles ne puissent être (dé)vérouillés qu'une fois par seconde, vu que le bouton du joystick est très sensible.
+
+&nbsp;
