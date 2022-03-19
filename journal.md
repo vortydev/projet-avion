@@ -50,7 +50,7 @@ J'ai commencé le cours en suivant le tutoriel Freenove au chapitre 15 afin d'ob
 
 J'ai ensuite inséré les segments de codes du servomoteur dans le script [servomoteurjoystick.py](./scripts/servomoteurjoystick.py) et l'ai adapté pour contrôler le servomoteur et le moteur DC en même temps avec le joystick.
 
-## Joystick - Vérouiller les contrôles
+## Joystick
 
 J'ai ensuite poursuivi en implémentant dans le script [servomoteurjoystick.py](./scripts/servomoteurjoystick.py) la fonctionnlité de vérouiller les contrôles du moteur DC et du servomoteur lorsque qu'on appuie sur le bouton (axe Z) du joystick. Rappuyer sur le bouton dévérouille les contrôles. Rinse, repeat.
 
@@ -72,6 +72,8 @@ J'ai commencé à préparer pour la *"greater picture"* en créant les fichiers:
 &nbsp;
 
 # Samedi 19/03/2022
+
+## Joystick
 
 J'ai *tweaké* les contrôles du joystick dans [servomoteurjoystick.py](./scripts/servomoteurjoystick.py) pour que les contrôles ne puissent être (dé)vérouillés qu'une fois par seconde, vu que le bouton du joystick est très sensible.
 

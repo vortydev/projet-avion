@@ -1,7 +1,7 @@
 # importations
 import RPi.GPIO as GPIO
-from time import sleep
 import time
+from time import sleep
 from ADCDevice import *
 
 # create adc object
@@ -61,9 +61,11 @@ def setup():
     motorPWM.start(0)
     servoPWM.start(0)
 
-def joystick_callback(channel):
-    print("Controls toggled")
+# called when the joystick is clicked
+def joystick_callback():
+    print("CALLBACK: Controls toggled!")
 
+# update motor spin
 def motor(ADC):
     value = ADC - 128
     if (value > 0):
@@ -83,18 +85,19 @@ def motor(ADC):
     motorPWM.start(val)
     return round(value)
 
+# update the servo position
 def servo(angle):
     value = map(map(angle, 0, 255, 0, 180), 0, 180, SERVO_MIN_DUTY, SERVO_MAX_DUTY)
     servoPWM.ChangeDutyCycle(value)   # map the angle to duty cycle and output it
     return round(map(value, SERVO_MIN_DUTY, SERVO_MAX_DUTY, 0, 100))
 
+# main loop
 def loop():
     lockedControls = False  # start with locked controls
     yVal = 128              # motor neutral state
     xVal = 128              # servo middle angle
     zStamp = time.localtime()
     zBuffer = time.localtime()
-
 
     while (True):
         zVal = GPIO.input(joystickZ)
@@ -114,11 +117,10 @@ def loop():
             yVal = 128
             xVal = 128
         
-        print("X: {}, Y: {}, Z: {}".format(xVal, yVal, zVal))
+        print("X: {}, Y: {}, Z: {}, Ctrl: {}".format(xVal, yVal, zVal, not lockedControls))
 
         motor(yVal)   # runs the update
         servo(xVal)   # runs the update
-        print("Locked controls: {}".format(lockedControls))
 
         sleep(0.01)
 
