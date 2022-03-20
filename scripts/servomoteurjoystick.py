@@ -11,9 +11,9 @@ adc = ADCDevice()
 joystickZ = 21
 
 # define L293D pins (DC motor)
-motorRPin1 = 27
-motorRPin2 = 17
-enablePin = 22
+motorRPin1 = 19
+motorRPin2 = 26
+enablePin = 6
 
 # define servo variables
 servoPin = 18                       # servo GPIO pin

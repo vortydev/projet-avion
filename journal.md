@@ -78,3 +78,13 @@ J'ai commencé à préparer pour la *"greater picture"* en créant les fichiers:
 J'ai *tweaké* les contrôles du joystick dans [servomoteurjoystick.py](./scripts/servomoteurjoystick.py) pour que les contrôles ne puissent être (dé)vérouillés qu'une fois par seconde, vu que le bouton du joystick est très sensible.
 
 &nbsp;
+
+# Dimanche 20/03/2022
+
+## Écran LCD
+
+J'ai ajouté à mon montage l'écran LCD. Le script [lcd.py](./scripts/lcd.py) affiche le temps et la température du CPU.
+
+J'ai ensuite intégré l'écran LCD au montage déjà existant dans le script [avion.py](./scripts/avion.py), en y affichant les valeurs pour le moteur DC et le servomoteur, ainsi que le code de la destination qui sera implémenté plus tard.
+
+&nbsp;
