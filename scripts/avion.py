@@ -177,8 +177,8 @@ def loop():
 def destroy():
     motorPWM.stop()
     servoPWM.stop()
-    adc.close()
     lcd.clear()
+    adc.close()
     GPIO.cleanup()
 
 # main
