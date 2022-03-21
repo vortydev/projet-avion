@@ -4,6 +4,32 @@ Ceci est mon journal personnel pour le projet pratique du cours **Introduction √
 
 &nbsp;
 
+# Scripts
+
+Les scripts du projet sont list√©s dessous.
+
+## A
+- [avion.py](./scripts/avion.py)
+
+## E
+- [etat.py](./scripts/etat.py)
+
+## J
+- [joystick.py](./scripts/joystick.py)
+
+## L
+- [lcd.py](./scripts/lcd.py)
+
+## M
+- [moteur.py](./scripts/moteur.py)
+- [moteurjoystick.py](./scripts/moteurjoystick.py)
+
+## S
+- [servo.py](./scripts/servo.py)
+- [servomoteurjoystick.py](./scripts/servomoteurjoystick.py)
+
+&nbsp;
+
 # Vendredi 25/02/2022
 
 ## Sessions SSH
