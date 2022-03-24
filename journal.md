@@ -114,3 +114,13 @@ J'ai ajouté à mon montage l'écran LCD. Le script [lcd.py](./scripts/lcd.py) a
 J'ai ensuite intégré l'écran LCD au montage déjà existant dans le script [avion.py](./scripts/avion.py), en y affichant les valeurs pour le moteur DC et le servomoteur, ainsi que le code de la destination qui sera implémenté plus tard.
 
 &nbsp;
+
+# Vendredi 25/03/2022
+
+Aujourd'hui j'ai commencé en refaisant les connections électriques sur le breadboard, afin de limiter le bruit électrique et faciliter la manipulation du montage.
+
+*J'ai mal aux doigts.*
+
+J'ai également mis à jour les connections des pins dans [avion.py](./scripts/avion.py) et simplifié la fonction du servomoteur.
+
+&nbsp;

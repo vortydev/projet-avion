@@ -25,7 +25,7 @@ joystickZ = 21
 # define L293D pins (DC motor)
 motorRPin1 = 19
 motorRPin2 = 26
-enablePin = 6
+enablePin = 13
 
 # define servo variables
 servoPin = 18                       # servo GPIO pin
@@ -115,7 +115,7 @@ def motor(ADC):
 
 # update the servo position
 def servo(angle):
-    value = map(map(angle, 0, 255, 0, 180), 0, 180, SERVO_MIN_DUTY, SERVO_MAX_DUTY)
+    value = map(angle, 0, 255, SERVO_MIN_DUTY, SERVO_MAX_DUTY)
     servoPWM.ChangeDutyCycle(value)   # map the angle to duty cycle and output it
     return round(map(angle, 0, 255, 0, 180))
 
@@ -175,9 +175,9 @@ def loop():
 
 # cleanup sequence
 def destroy():
+    lcd.clear()
     motorPWM.stop()
     servoPWM.stop()
-    lcd.clear()
     adc.close()
     GPIO.cleanup()
 
