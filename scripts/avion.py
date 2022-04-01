@@ -3,12 +3,12 @@
 # Description :     Programme principal du projet avion.
 # Auteur :          Étienne Ménard
 # Création :        2022/03/18
-# Modification :    2022/03/18
+# Modification :    2022/04/01
 ########################################################
 
 # importations
 import time
-from time import sleep, strftime
+from time import sleep
 from datetime import datetime
 
 import RPi.GPIO as GPIO
@@ -16,16 +16,34 @@ from ADCDevice import *
 from PCF8574 import PCF8574_GPIO
 from Adafruit_LCD1602 import Adafruit_CharLCD
 
+####################
+
+# conditions
+C1 = False  # vrai si C2 est false
+C2 = False  # code carte RFID autorisé par l'avion
+C3 = False  # touche # appuyée
+C4 = False  # C3 et C5 sont false
+C5 = False  # interrupteur PWR position "ON"
+C6 = False  # C7 est false
+C7 = False  # interrupteur PWR position "OFF"
+
 # create adc object
 adc = ADCDevice()
 
+# define LED pins
+rLED = 16
+yLED = 20
+gLED = 21
+onLED = GPIO.LOW
+offLED = GPIO.HIGH
+
 # define joystick pins
-joystickZ = 21
+joystickZ = 5
 
 # define L293D pins (DC motor)
+enablePin = 13
 motorRPin1 = 19
 motorRPin2 = 26
-enablePin = 13
 
 # define servo variables
 servoPin = 18                       # servo GPIO pin
@@ -39,6 +57,7 @@ PCF8574A_address = 0x3F # I2C address of the PCF8574A chip.
 # Create PCF8574 GPIO adapter.
 try:
     mcp = PCF8574_GPIO(PCF8574_address)
+    print("Found LCD display")
 except:
     try:
         mcp = PCF8574_GPIO(PCF8574A_address)
@@ -48,6 +67,8 @@ except:
 
 # Create LCD, passing in MCP GPIO adapter.
 lcd = Adafruit_CharLCD(pin_rs=0, pin_e=2, pins_db=[4,5,6,7], GPIO=mcp)
+
+####################
 
 # map a value from one range to another
 def map(value, fromLow, fromHigh, toLow, toHigh):
@@ -68,14 +89,22 @@ def setup():
     # setup GPIO
     GPIO.setmode(GPIO.BCM)
 
+    # setup LEDs
+    GPIO.setup(rLED, GPIO.OUT)
+    GPIO.output(rLED, offLED)
+    GPIO.setup(yLED, GPIO.OUT)
+    GPIO.output(yLED, offLED)
+    GPIO.setup(gLED, GPIO.OUT)
+    GPIO.output(gLED, offLED)
+
     # setup joystick
     GPIO.setup(joystickZ, GPIO.IN, GPIO.PUD_UP)
     GPIO.add_event_detect(joystickZ, GPIO.RISING, callback=joystick_callback)
 
     # setup DC motor
+    GPIO.setup(enablePin, GPIO.OUT)
     GPIO.setup(motorRPin1, GPIO.OUT)
     GPIO.setup(motorRPin2, GPIO.OUT)
-    GPIO.setup(enablePin, GPIO.OUT)
 
     # setup servo 
     GPIO.setup(servoPin, GPIO.OUT)
@@ -96,6 +125,8 @@ def joystick_callback(channel):
 # update motor spin
 def motor(ADC):
     value = ADC - 128
+    # print(value)
+
     if (value > 0):
         GPIO.output(motorRPin1, GPIO.HIGH)
         GPIO.output(motorRPin2, GPIO.LOW)
@@ -119,59 +150,126 @@ def servo(angle):
     servoPWM.ChangeDutyCycle(value)   # map the angle to duty cycle and output it
     return round(map(angle, 0, 255, 0, 180))
 
-def get_cpu_temp(): # get CPU temperature and store it into file "/sys/class/thermal/thermal_zone0/temp"
-    tmp = open('/sys/class/thermal/thermal_zone0/temp')
-    cpu = tmp.read()
-    tmp.close()
-    return '{:.2f}'.format( float(cpu)/1000 ) + ' C'
+    # while (True):
+    #     zVal = GPIO.input(joystickZ)
 
-def get_time_now(): # get system time
-    return datetime.now().strftime('%H:%M:%S')
+    #     zStamp = time.localtime()
+    #     if GPIO.event_detected(joystickZ):
+    #         if (time.asctime(zStamp) > time.asctime(zBuffer)):
+    #             lockedControls = not lockedControls
+    #             zBuffer = time.localtime()
+        
+    #     if not lockedControls:
+    #         yBuffer = yVal = adc.analogRead(0)
+    #         xBuffer = xVal = adc.analogRead(1)
+    #     else:
+    #         yVal = yBuffer
+    #         xVal = xBuffer
+        
+    #     print("X: {}, Y: {}, Z: {}, Ctrl: {}".format(xVal, yVal, zVal, not lockedControls))
 
-# main loop
+    #     vY = motor(yVal)   # runs the update
+    #     vX = servo(xVal)   # runs the update
+
+    #     lcd.setCursor(0,0) # set cursor position
+    #     strY = str(vY).rjust(3, " ")
+    #     strX = str(vX).rjust(3, " ")
+    #     lcd.message("Mtr:" + strY+ "% Ang:" + strX)
+    #     lcd.message("\nDestination: {}".format("POG"))
+
+    #     sleep(0.01)
+
+# en attente
+def E1():
+    print("E1: En attente\n")
+    # impossible de contrôler les moteurs (DC et servo)
+    # clavier désactivé
+    # interrupteur désactivé
+    # LCD affiche "Scannez la carte"
+    # attendre qu'une carte soit passée au lecteur RFID
+
+# pré-vol
+def E2():
+    print("E2: Pré-vol\n")
+    # entrer code de destination
+    # LCD affiche que l'on peut démarrer
+    # interrupteur activé
+
+# prêt à voler
+def E3(controls, xBuffer, yBuffer, zBuffer):
+    # print("E3: Prêt à voler\n")
+    zVal = GPIO.input(joystickZ)
+
+    zStamp = time.localtime()
+    if GPIO.event_detected(joystickZ):
+        if (time.asctime(zStamp) > time.asctime(zBuffer)):
+            controls = not controls
+            zBuffer = time.localtime()
+    
+    if controls:
+        yBuffer = yVal = adc.analogRead(0)
+        xBuffer = xVal = adc.analogRead(1)
+    else:
+        yVal = yBuffer
+        xVal = xBuffer
+    
+    print("X: {}, Y: {}, Z: {}, Ctrl: {}".format(xVal, yVal, zVal, controls))
+
+    vY = motor(yVal)   # runs the update
+    vX = servo(xVal)   # runs the update
+
+    lcd.setCursor(0,0) # set cursor position
+    strY = str(vY).rjust(3, " ")
+    strX = str(vX).rjust(3, " ")
+    lcd.message("Mtr:" + strY+ "% Ang:" + strX)
+    lcd.message("\nDestination: {}".format("POG"))
+
+    data = [controls, xBuffer, yBuffer, zBuffer]
+    return data
+
+
 def loop():
-    lockedControls = False  # start with locked controls
-    yVal = 128              # motor neutral state
-    xVal = 128              # servo middle angle
+    currentstate = "E3"
+
+    mcp.output(3,1)     # turn on LCD backlight
+    lcd.begin(16,2)     # set number of LCD lines and columns
+
+    # prêt à voler
+    controls = False    # start with locked controls
+    yVal = 128          # motor neutral state
+    xVal = 128          # servo middle angle
     yBuffer = yVal
     xBuffer = xVal
-    zStamp = time.localtime()
     zBuffer = time.localtime()
 
-    mcp.output(3,1) # turn on LCD backlight
-    lcd.begin(16,2) # set number of LCD lines and columns
-
     while (True):
-        zVal = GPIO.input(joystickZ)
 
-        zStamp = time.localtime()
-        if GPIO.event_detected(joystickZ):
-            if (time.asctime(zStamp) > time.asctime(zBuffer)):
-                lockedControls = not lockedControls
-                zBuffer = time.localtime()
-            
-        
-        
-        if not lockedControls:
-            yBuffer = yVal = adc.analogRead(0)
-            xBuffer = xVal = adc.analogRead(1)
-        else:
-            yVal = yBuffer
-            xVal = xBuffer
-        
-        print("X: {}, Y: {}, Z: {}, Ctrl: {}".format(xVal, yVal, zVal, not lockedControls))
+        if currentstate == "E1":
+            E1()
+            # Validation des conditions pour la mise à jour de l'état
+        if C2 is True:
+            currentstate = "E2"
 
-        vY = motor(yVal)   # runs the update
-        vX = servo(xVal)   # runs the update
+        elif currentstate == "E2":
+            E2()
+            # Validation des conditions pour la mise à jour de l'état
+            if C3 is True:
+                currentstate = "E1"
+            elif C4 is True:
+                currentstate = "E3"
 
-        lcd.setCursor(0,0) # set cursor position
-        strY = str(vY).rjust(3, " ")
-        strX = str(vX).rjust(3, " ")
-        lcd.message("Mtr:" + strY+ "% Ang:" + strX)
-        lcd.message("\nDestination: {}".format("POG"))
-        # lcd.message( get_time_now() ) # display the time
+        elif currentstate == "E3":
+            data = E3(controls, xBuffer, yBuffer, zBuffer)
+            controls = data[0]
+            xBuffer = data[1]
+            yBuffer = data[2]
+            zBuffer = data[3]
 
-        sleep(0.01)
+            # print(data)
+            sleep(0.01)
+            # Validation des conditions pour la mise à jour de l'état
+            if C7 is True:
+                currentstate = "E1"
 
 # cleanup sequence
 def destroy():

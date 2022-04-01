@@ -4,35 +4,50 @@ Ceci est mon journal personnel pour le projet pratique du cours **Introduction �
 
 &nbsp;
 
-# Scripts
+## Scripts
 
 Les scripts du projet sont listés dessous.
 
-## A
+### A
 - [avion.py](./scripts/avion.py)
 
-## E
+### E
 - [etat.py](./scripts/etat.py)
 
-## J
+### J
 - [joystick.py](./scripts/joystick.py)
 
 ## L
 - [lcd.py](./scripts/lcd.py)
 
-## M
+### M
 - [moteur.py](./scripts/moteur.py)
 - [moteurjoystick.py](./scripts/moteurjoystick.py)
 
-## S
+### S
 - [servo.py](./scripts/servo.py)
 - [servomoteurjoystick.py](./scripts/servomoteurjoystick.py)
 
 &nbsp;
 
-# Vendredi 25/02/2022
+## Spécifications électriques
 
-## Sessions SSH
+### Tableau de connexions pour le *header* du *Raspberry Pi*
+| # *pin* | Nom E/S | Connecté à |
+|-|-|--|
+| SDA1 | SDA 1 | ADC et LCD |
+| SCL1  | SCL 1 | ADC et LCD |
+| 13 | GPIO 13 | Contrôle moteur (L293D) |
+| 18 | GPIO 18 | Servomoteur |
+| 19 | GPIO 19 | Contrôle moteur (L293D) |
+| 21 | GPIO 21 | Bouton *joystick* (SW) |
+| 26 | GPIO 26 | Contrôle moteur (L293D) |
+
+&nbsp;
+
+## Vendredi 25/02/2022
+
+### Sessions SSH
 
 Cette semaine j'ai seulement configuré mon Raspberry Pi afin d'ouvrir des sessions SSH à partir de mon ordinateur portable dans Visual Studio Code, en suivant les instructions jointes de la semaine 6.
 
@@ -40,9 +55,9 @@ Article suivi: [lien](https://anthonyfourie.com/2021/08/16/vs-code-setting-remot
 
 &nbsp;
 
-# Vendredi 11/03/2022
+## Vendredi 11/03/2022
 
-## Moteur DC
+### Moteur DC
 
 J'ai suivi le tutoriel Freenove au Chapitre 13 afin de créer un montage avec le moteur DC et un potentiomètre. Il est préférable d'utiliser l'alimentation offerte par le Power Breakout Board (la petite board noire dans laquelle on peut brancher une pile 9V comme source d'alimentation), plutôt que d'utiliser le GPIO Extension Board.
 
@@ -50,7 +65,7 @@ Le script [moteur.py](./scripts/moteur.py) permet au moteur de tourner en sens h
 
 > Il est pertinent de débrancher le moteur lorsqu'on le teste pas, car il tire beaucoup d'énergie de la pile et peut faire planter le programme.
 
-## Joystick
+### Joystick
 
  J'ai ensuite poursuivi en remplaçant le potentiomètre du montage précédent par le joystick, en me basant sur les diagrammes du tutoriel Freenove au Chapitre 12. Assez facile.
 
@@ -58,7 +73,7 @@ Le script [joystick.py](./scripts/joystick.py) affiche les valeurs des axes X (h
 
 > La position "neutre" du joystick n'est pas parfaitement centrée, ça sera peut-être à tweaker plus tard dans le projet.
 
-## Moteur DC + Joystick
+### Moteur DC + Joystick
 
 La suite logique était ensuite de remplacer le potentiomètre dans le script du moteur par le joystick. Simple et facile, les axes X et Z sont écoutés même si le moteur DC n'utilise que les valeurs de l'axe Y.
 
@@ -68,19 +83,19 @@ Le script [moteurjoystick.py](./scripts/moteurjoystick.py) permet de faire tourn
 
 &nbsp;
 
-# Vendredi 18/03/2022
+## Vendredi 18/03/2022
 
-## Servomoteur
+### Servomoteur
 
 J'ai commencé le cours en suivant le tutoriel Freenove au chapitre 15 afin d'obtenir un montage et le script [servo.py](./scripts/servo.py) qui fait tourner mon servomoteur de 0 à 180 degrés allez-retour.
 
 J'ai ensuite inséré les segments de codes du servomoteur dans le script [servomoteurjoystick.py](./scripts/servomoteurjoystick.py) et l'ai adapté pour contrôler le servomoteur et le moteur DC en même temps avec le joystick.
 
-## Joystick
+### Joystick
 
 J'ai ensuite poursuivi en implémentant dans le script [servomoteurjoystick.py](./scripts/servomoteurjoystick.py) la fonctionnlité de vérouiller les contrôles du moteur DC et du servomoteur lorsque qu'on appuie sur le bouton (axe Z) du joystick. Rappuyer sur le bouton dévérouille les contrôles. Rinse, repeat.
 
-## Codage
+### Codage
 
 J'ai commencé à préparer pour la *"greater picture"* en créant les fichiers:
 - [avion.py](./scripts/avion.py) : Contrôleur principal du programme de l'avion.
@@ -97,17 +112,17 @@ J'ai commencé à préparer pour la *"greater picture"* en créant les fichiers:
 
 &nbsp;
 
-# Samedi 19/03/2022
+## Samedi 19/03/2022
 
-## Joystick
+### Joystick
 
 J'ai *tweaké* les contrôles du joystick dans [servomoteurjoystick.py](./scripts/servomoteurjoystick.py) pour que les contrôles ne puissent être (dé)vérouillés qu'une fois par seconde, vu que le bouton du joystick est très sensible.
 
 &nbsp;
 
-# Dimanche 20/03/2022
+## Dimanche 20/03/2022
 
-## Écran LCD
+### Écran LCD
 
 J'ai ajouté à mon montage l'écran LCD. Le script [lcd.py](./scripts/lcd.py) affiche le temps et la température du CPU.
 
@@ -115,7 +130,7 @@ J'ai ensuite intégré l'écran LCD au montage déjà existant dans le script [a
 
 &nbsp;
 
-# Vendredi 25/03/2022
+## Vendredi 25/03/2022
 
 Aujourd'hui j'ai commencé en refaisant les connections électriques sur le breadboard, afin de limiter le bruit électrique et faciliter la manipulation du montage.
 
@@ -124,3 +139,9 @@ Aujourd'hui j'ai commencé en refaisant les connections électriques sur le brea
 J'ai également mis à jour les connections des pins dans [avion.py](./scripts/avion.py) et simplifié la fonction du servomoteur.
 
 &nbsp;
+
+## Vendredi 01/04/2022
+
+J'ai débuté le cours en commençant un tableau des spécifications électriques et des connections des composants du projet.
+
+J'ai ensuite débuté d'implémenter les états de [etat.py](./scripts/etat.py) dans le fichier [avion.py](./scripts/avion.py), et j'ai déplacé le code du contrôle du moteur DC et du servomoteur dans la fonction E3.
