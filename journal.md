@@ -34,13 +34,17 @@ Les scripts du projet sont listés dessous.
 
 ### Tableau de connexions pour le *header* du *Raspberry Pi*
 | # *pin* | Nom E/S | Connecté à |
-|-|-|--|
+|-|-|-|
 | SDA1 | SDA 1 | ADC et LCD |
 | SCL1  | SCL 1 | ADC et LCD |
+| 5 | GPIO 5 | Bouton *joystick* (SW) |
+| 12 | GPIO 12 | Interrupteur *slide switch* (SW) |
 | 13 | GPIO 13 | Contrôle moteur (L293D) |
+| 16 | GPIO 16 | DEL rouge |
 | 18 | GPIO 18 | Servomoteur |
 | 19 | GPIO 19 | Contrôle moteur (L293D) |
-| 21 | GPIO 21 | Bouton *joystick* (SW) |
+| 20 | GPIO 20 | DEL jaune |
+| 21 | GPIO 21 | DEL verte |
 | 26 | GPIO 26 | Contrôle moteur (L293D) |
 
 &nbsp;
@@ -101,7 +105,6 @@ J'ai commencé à préparer pour la *"greater picture"* en créant les fichiers:
 - [avion.py](./scripts/avion.py) : Contrôleur principal du programme de l'avion.
 - [etat.py](./scripts/etat.py) : Script responsable de la gestion des états et des conditions.
 
-
 > On peut accéder aux fonctions définies dans un script en l'important comme un module.
 > ```python
 > # importations
@@ -145,3 +148,39 @@ J'ai également mis à jour les connections des pins dans [avion.py](./scripts/a
 J'ai débuté le cours en commençant un tableau des spécifications électriques et des connections des composants du projet.
 
 J'ai ensuite débuté d'implémenter les états de [etat.py](./scripts/etat.py) dans le fichier [avion.py](./scripts/avion.py), et j'ai déplacé le code du contrôle du moteur DC et du servomoteur dans la fonction E3.
+
+&nbsp;
+
+## Samedi 02/04/2022
+
+### Interrupteur
+
+J'ai ajouté l'interrupteur au montage et codé la détection et le changement de la condition C5 dans le script [avion.py](./scripts/avion.py).
+
+&nbsp;
+
+## Dimanche 03/04/2022
+
+### Interrupteur
+
+L'interrupteur prenait initialement son alimentation de la même ligne que le contrôleur du moteur DC, ce qui empêchait le circuit de se fermer et de fonctionner correctement. Je pensais initialement que la pile 9V qui alimentait le montage était vide, vu que je l'avais laissée branchée au Power Breakout Board toute une nuit. Je suis donc allé acheter de nouvelles piles 9V (c'est de la grosse arnaque, une seule pile coûte 10$???), et comme remplacer la pile n'a rien changé à mon problème, j'ai repositionné l'interrupteur à une autre place sur le bread board et tout fonctionnait à nouveau!
+
+&nbsp;
+
+## Mardi 05/04/2022
+
+### RFID
+
+J'ai lu la théorie et la documentation de Freenove concernant le module de RFID.
+
+> Le code python en exemple est malheureusement en Python 2, je devrai donc chercher et trouver le fichier Python 3 caché dans le répertoire des modules Freenove.
+
+&nbsp;
+
+## Mercredi 06/04/2022
+
+### Documentation
+
+J'ai mis à jour le tableau de spécifications électriques du montage actuel et mon journal du projet avec l'avancement des derniers jours.
+
+&nbsp;
