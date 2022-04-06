@@ -163,7 +163,11 @@ J'ai ajouté l'interrupteur au montage et codé la détection et le changement d
 
 ### Interrupteur
 
-L'interrupteur prenait initialement son alimentation de la même ligne que le contrôleur du moteur DC, ce qui empêchait le circuit de se fermer et de fonctionner correctement. Je pensais initialement que la pile 9V qui alimentait le montage était vide, vu que je l'avais laissée branchée au Power Breakout Board toute une nuit. Je suis donc allé acheter de nouvelles piles 9V (c'est de la grosse arnaque, une seule pile coûte 10$???), et comme remplacer la pile n'a rien changé à mon problème, j'ai repositionné l'interrupteur à une autre place sur le bread board et tout fonctionnait à nouveau!
+L'interrupteur prenait initialement son alimentation de la même ligne que le contrôleur du moteur DC, ce qui empêchait le circuit de se fermer et de fonctionner correctement. 
+
+J'ai donc créé un script séparé, [switch.py](./scripts/switch.py), afin de tenter de déboguer mon étrange problème, sans succès.
+
+J'ai ensuite pensé que peut-être la pile 9V qui alimentait le montage était vide, vu que je l'avais laissée branchée au Power Breakout Board toute une nuit. Je suis donc allé acheter de nouvelles piles 9V (c'est de la grosse arnaque, une seule pile coûte 10$???), et comme remplacer la pile n'a rien changé à mon problème, j'ai repositionné l'interrupteur à une autre place sur le bread board et tout fonctionnait à nouveau!
 
 &nbsp;
 
@@ -182,5 +186,7 @@ J'ai lu la théorie et la documentation de Freenove concernant le module de RFID
 ### Documentation
 
 J'ai mis à jour le tableau de spécifications électriques du montage actuel et mon journal du projet avec l'avancement des derniers jours.
+
+Mon répertoire local sur mon Raspberry Pi s'était corrompu, j'ai donc fait des gymanstique avec Git afin de mettre mon projet à jour sans trop de pépins.
 
 &nbsp;
