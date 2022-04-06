@@ -9,24 +9,34 @@ Ceci est mon journal personnel pour le projet pratique du cours **Introduction �
 Les scripts du projet sont listés dessous.
 
 ### A
-- [avion.py](./scripts/avion.py)
+
+- [Adafruit_LCD1602.py](./scripts/Adafruit_LCD1602.py) : Classe de l'écran LCD.
+- [avion.py](./scripts/avion.py) : Programme principal du projet.
 
 ### E
-- [etat.py](./scripts/etat.py)
+- [etat.py](./scripts/etat.py) : Squelette des états de l'avion.
 
 ### J
-- [joystick.py](./scripts/joystick.py)
+- [joystick.py](./scripts/joystick.py) : Script de test pour le joystick.
 
 ## L
-- [lcd.py](./scripts/lcd.py)
+- [lcd.py](./scripts/lcd.py) : Script de test pour l'écran LCD.
 
 ### M
-- [moteur.py](./scripts/moteur.py)
-- [moteurjoystick.py](./scripts/moteurjoystick.py)
+- [MFRC522.py](./scripts/MFRC522.py) : Classe interfaçant le module NFC MF522-AN du lecteur RFID.
+- [moteur.py](./scripts/moteur.py) : Script de test pour le moteur DC.
+- [moteurjoystick.py](./scripts/moteurjoystick.py) : Script de test pour le moteur DC et le joystick.
+
+### P
+- [PCF8574.py](./scripts/PCF8574.py) : Classe interfaçant le module PCF8574 de l'écran LCD.
+
+### R
+- [rfid.py](./scripts/rfid.py) : Script de test pour le lecteur RFID.
 
 ### S
-- [servo.py](./scripts/servo.py)
-- [servomoteurjoystick.py](./scripts/servomoteurjoystick.py)
+- [servo.py](./scripts/servo.py) : Script de test pour le servomoteur.
+- [servomoteurjoystick.py](./scripts/servomoteurjoystick.py) : Script de test pour le servomoteur, le moteur DC et le joystick.
+- [switch.py](./scripts/switch.py) : Script de test pour l'interrupteur *slide switch*.
 
 &nbsp;
 
@@ -185,8 +195,14 @@ J'ai lu la théorie et la documentation de Freenove concernant le module de RFID
 
 ### Documentation
 
-J'ai mis à jour le tableau de spécifications électriques du montage actuel et mon journal du projet avec l'avancement des derniers jours.
+J'ai mis à jour le tableau des connections électriques du Raspberry Pi et mon journal du projet avec l'avancement des derniers jours.
 
 Mon répertoire local sur mon Raspberry Pi s'était corrompu, j'ai donc fait des gymanstique avec Git afin de mettre mon projet à jour sans trop de pépins.
+
+J'ai ajouté de brèves descriptions aux [scripts](#scripts).
+
+### RFID
+
+J'ai importé les fichiers nécessaires au fonctionnement du lecteur RFID, que j'ai testé dans le script [rfid.py](./scripts/rfid.py).
 
 &nbsp;
