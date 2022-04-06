@@ -3,11 +3,7 @@
 # Description :     Programme principal du projet avion.
 # Auteur :          Étienne Ménard
 # Création :        2022/03/18
-<<<<<<< HEAD
-# Modification :    2022/04/01
-=======
 # Modification :    2022/04/02
->>>>>>> master
 ########################################################
 
 # importations
@@ -22,16 +18,6 @@ from Adafruit_LCD1602 import Adafruit_CharLCD
 
 ####################
 
-<<<<<<< HEAD
-# conditions
-C1 = False  # vrai si C2 est false
-C2 = False  # code carte RFID autorisé par l'avion
-C3 = False  # touche # appuyée
-C4 = False  # C3 et C5 sont false
-C5 = False  # interrupteur PWR position "ON"
-C6 = False  # C7 est false
-C7 = False  # interrupteur PWR position "OFF"
-=======
 # CONDITIONS    # VRAI SI
 C1 = False      # C2 est false
 C2 = False      # code carte RFID autorisé par l'avion
@@ -40,7 +26,6 @@ C4 = False      # C3 et C5 sont false
 C5 = False      # interrupteur PWR position "ON"
 C6 = False      # C7 est false
 C7 = False      # interrupteur PWR position "OFF"
->>>>>>> master
 
 # create adc object
 adc = ADCDevice()
@@ -51,13 +36,10 @@ yLED = 20
 gLED = 21
 onLED = GPIO.LOW
 offLED = GPIO.HIGH
-<<<<<<< HEAD
-=======
 LEDs = {rLED, yLED, gLED}
 
 # define switch pins
 interrupteur = 12
->>>>>>> master
 
 # define joystick pins
 joystickZ = 5
@@ -139,15 +121,6 @@ def setup():
     # set PWM frequencies
     global motorPWM
     global servoPWM
-<<<<<<< HEAD
-    motorPWM = GPIO.PWM(enablePin, 1000)   # set frequence to 1KHz
-    servoPWM = GPIO.PWM(servoPin, 50)   # set frequence to 50Hz
-    motorPWM.start(0)
-    servoPWM.start(0)
-
-# called when the joystick is clicked
-def joystick_callback(channel):
-=======
     motorPWM = GPIO.PWM(enablePin, 1000)    # set frequence to 1KHz
     servoPWM = GPIO.PWM(servoPin, 50)       # set frequence to 50Hz
     motorPWM.start(0)
@@ -167,7 +140,6 @@ def interrupteurCallback(channel):
 
 # called when the joystick is clicked
 def joystickCallback(channel):
->>>>>>> master
     print("CALLBACK: Controls toggled!")
 
 # update motor spin
@@ -198,45 +170,10 @@ def servo(angle):
     servoPWM.ChangeDutyCycle(value)   # map the angle to duty cycle and output it
     return round(map(angle, 0, 255, 0, 180))
 
-<<<<<<< HEAD
-    # while (True):
-    #     zVal = GPIO.input(joystickZ)
-
-    #     zStamp = time.localtime()
-    #     if GPIO.event_detected(joystickZ):
-    #         if (time.asctime(zStamp) > time.asctime(zBuffer)):
-    #             lockedControls = not lockedControls
-    #             zBuffer = time.localtime()
-        
-    #     if not lockedControls:
-    #         yBuffer = yVal = adc.analogRead(0)
-    #         xBuffer = xVal = adc.analogRead(1)
-    #     else:
-    #         yVal = yBuffer
-    #         xVal = xBuffer
-        
-    #     print("X: {}, Y: {}, Z: {}, Ctrl: {}".format(xVal, yVal, zVal, not lockedControls))
-
-    #     vY = motor(yVal)   # runs the update
-    #     vX = servo(xVal)   # runs the update
-
-    #     lcd.setCursor(0,0) # set cursor position
-    #     strY = str(vY).rjust(3, " ")
-    #     strX = str(vX).rjust(3, " ")
-    #     lcd.message("Mtr:" + strY+ "% Ang:" + strX)
-    #     lcd.message("\nDestination: {}".format("POG"))
-
-    #     sleep(0.01)
-
-# en attente
-def E1():
-    print("E1: En attente\n")
-=======
 # en attente
 def E1():
     print("E1: En attente\n")
     toggleLED(rLED)
->>>>>>> master
     # impossible de contrôler les moteurs (DC et servo)
     # clavier désactivé
     # interrupteur désactivé
@@ -245,16 +182,6 @@ def E1():
 
 # pré-vol
 def E2():
-<<<<<<< HEAD
-    print("E2: Pré-vol\n")
-    # entrer code de destination
-    # LCD affiche que l'on peut démarrer
-    # interrupteur activé
-
-# prêt à voler
-def E3(controls, xBuffer, yBuffer, zBuffer):
-    # print("E3: Prêt à voler\n")
-=======
     # print("E2: Pré-vol\n")
     toggleLED(yLED)
 
@@ -275,7 +202,6 @@ def E3(controls, xBuffer, yBuffer, zBuffer):
 
     # GPIO.event_detected(interrupteur)
     
->>>>>>> master
     zVal = GPIO.input(joystickZ)
 
     zStamp = time.localtime()
@@ -307,11 +233,7 @@ def E3(controls, xBuffer, yBuffer, zBuffer):
 
 
 def loop():
-<<<<<<< HEAD
-    currentstate = "E3"
-=======
     currentstate = "E2"
->>>>>>> master
 
     mcp.output(3,1)     # turn on LCD backlight
     lcd.begin(16,2)     # set number of LCD lines and columns
