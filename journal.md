@@ -205,4 +205,6 @@ J'ai ajouté de brèves descriptions aux [scripts](#scripts).
 
 J'ai importé les fichiers nécessaires au fonctionnement du lecteur RFID, que j'ai testé dans le script [rfid.py](./scripts/rfid.py).
 
+Après de nombreuses heures de recherches, de taponnage et de frustration, j'ai finalement réussi à faire fonctionner le lecteur RFID au sein du script [avion.py](./scripts/avion.py). Il a fallu que je *rollback* la librairie SPI-Py à une version antécédante, merci à [derweili](https://stackoverflow.com/questions/54847012/raspberry-pi-3b-and-rfid-rc522-python-typeerror) d'avoir publié ta réponse!
+
 &nbsp;

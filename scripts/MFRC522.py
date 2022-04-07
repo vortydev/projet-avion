@@ -7,7 +7,7 @@ import signal
 import time
   
 class MFRC522:
-  NRSTPD = 22
+  NRSTPD = 25
   
   MAX_LEN = 16
   
@@ -109,8 +109,8 @@ class MFRC522:
   
   def __init__(self, dev='/dev/spidev0.0', spd=1000000):
     spi.openSPI(device=dev,speed=spd)
-    GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(22, GPIO.OUT)
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(25, GPIO.OUT)
     GPIO.output(self.NRSTPD, 1)
     if(self.MFRC522_Init()<0):
       print ("MFRC522 Init Failed!")
@@ -132,7 +132,7 @@ class MFRC522:
     self.Write_MFRC522(reg, tmp | mask)
     
   def ClearBitMask(self, reg, mask):
-    tmp = self.Read_MFRC522(reg);
+    tmp = self.Read_MFRC522(reg)
     self.Write_MFRC522(reg, tmp & (~mask))
   
   def AntennaOn(self):
@@ -412,7 +412,7 @@ class MFRC522:
   def MFRC522_Init(self):
     GPIO.output(self.NRSTPD, 1)
   
-    self.MFRC522_Reset();
+    self.MFRC522_Reset()
     
     self.Write_MFRC522(self.TPrescalerReg, 0x3E)
     checkValue=self.Read_MFRC522(self.TPrescalerReg)
