@@ -21,6 +21,7 @@ from ADCDevice import *
 from PCF8574 import PCF8574_GPIO
 from Adafruit_LCD1602 import Adafruit_CharLCD
 import MFRC522
+import Keypad
 
 
 ######################
@@ -50,10 +51,10 @@ yLED = 20
 gLED = 21
 onLED = GPIO.LOW
 offLED = GPIO.HIGH
-LEDs = {rLED, yLED, gLED}
+LEDs = [rLED, yLED, gLED]
 
 # define switch pins
-interrupteur = 12
+interrupteur = 6
 
 # define joystick pins
 joystickZ = 5
@@ -64,7 +65,7 @@ motorRPin1 = 19
 motorRPin2 = 26
 
 # define servo variables
-servoPin = 18                       # servo GPIO pin
+servoPin = 12                       # servo GPIO pin
 OFFSET_DUTY = 0.5                   # pulse offset
 SERVO_MIN_DUTY = 2.5 + OFFSET_DUTY  # pulse duty for minimum angle of the servo
 SERVO_MAX_DUTY = 12.5 + OFFSET_DUTY # pulse duty for maximum angle of the servo
@@ -88,7 +89,21 @@ lcd = Adafruit_CharLCD(pin_rs=0, pin_e=2, pins_db=[4,5,6,7], GPIO=mcp)
 
 # Create an object of the class MFRC522
 mfrc = MFRC522.MFRC522()
-validCards = {"E993DB6ECF", "AAC2E4800C"}
+validCards = ["E993DB6ECF", "AAC2E4800C"]
+
+# keypad matrix
+ROWS = 4
+COLS = 4
+keys = ['1','2','3','A',
+        '4','5','6','B',
+        '7','8','9','C',
+        '*','0','#','D']
+
+rowsPins = [4, 17, 27, 22]
+colsPins = [10, 18, 23, 24]
+
+keypad = Keypad.Keypad(keys, rowsPins, colsPins, ROWS, COLS)    # create Keypad object
+
 
 
 #####################
@@ -147,8 +162,10 @@ def setup():
     motorPWM.start(0)
     servoPWM.start(0)
 
-    # setup RFID
-    global mrfc
+    # setup keypad matrix
+    global keypad
+    keypad.setDebounceTime(50)  # set the debounce time
+
 
 def toggleLED(LED):
     for val in LEDs:
@@ -224,7 +241,7 @@ def E1():
     # interrupteur désactivé
 
     # LCD affiche "Scannez la carte"
-    lcd.setCursor(0,0) # set cursor position
+    lcd.setCursor(0,0)
     lcd.message("Scannez la carte")
 
     # attendre qu'une carte soit passée au lecteur RFID
@@ -261,15 +278,25 @@ def E1():
 
 # pré-vol
 def E2():
+    global C3
+    global C5
     print("E2: Pré-vol\n")
     toggleLED(yLED)
 
+    lcd.setCursor(0,0)
+    lcd.message("Entrez le code")
     # entrer code de destination
-    global C3
+    
+
+    key = keypad.getKey() #obtain the state of keys
+    if (key != keypad.NULL): #if there is key pressed, print its key code.
+        print("You Pressed Key : %c "%(key))
+
+
 
     # LCD affiche que l'on peut démarrer
 
-    global C5
+    
     if (GPIO.input(interrupteur) == 1):
         C5 = True
     else:
@@ -358,16 +385,20 @@ def loop():
             updateConditions()
             if C2 is True:
                 currentstate = "E2"
+                lcd.clear()
 
         elif currentstate == "E2":
             E2()
             updateConditions()
             if C3 is True:
                 currentstate = "E1"
+                lcd.clear()
             elif C4 is True:
                 currentstate = "E3"
+                lcd.clear()
                 motorPWM.start(0)
                 servoPWM.start(0)
+            sleep(0.1)
 
         elif currentstate == "E3":
             data = E3(controls, xBuffer, yBuffer, zBuffer)
@@ -383,6 +414,7 @@ def loop():
             # Validation des conditions pour la mise à jour de l'état
             if C7 is True:
                 currentstate = "E1"
+                lcd.clear()
 
 # cleanup sequence
 def destroy():

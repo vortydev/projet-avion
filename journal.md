@@ -19,6 +19,9 @@ Les scripts du projet sont listés dessous.
 ### J
 - [joystick.py](./scripts/joystick.py) : Script de test pour le joystick.
 
+### K
+- [Keypad.py](./scripts/Keypad.py) : Classe du keypad matrix.
+
 ## L
 - [lcd.py](./scripts/lcd.py) : Script de test pour l'écran LCD.
 
@@ -45,17 +48,29 @@ Les scripts du projet sont listés dessous.
 ### Tableau de connexions pour le *header* du *Raspberry Pi*
 | # *pin* | Nom E/S | Connecté à |
 |-|-|-|
-| SDA1 | SDA 1 | ADC et LCD |
-| SCL1  | SCL 1 | ADC et LCD |
+| 2 | SDA 1 | ADC et LCD |
+| 3 | SCL 1 | ADC et LCD |
+| 4 | GPIO 4 | Keypad matrix |
 | 5 | GPIO 5 | Bouton *joystick* (SW) |
-| 12 | GPIO 12 | Interrupteur *slide switch* (SW) |
+| 6 | GPIO 6 | Interrupteur *slide switch* (SW) |
+| 8 | CE0 | Keypad matrix |
+| 9 | MISO | Keypad matrix |
+| 10 | MOSI | Keypad matrix |
+| 11 | SCLK | Keypad matrix |
+| 12 | GPIO 12 | Servomoteur |
 | 13 | GPIO 13 | Contrôle moteur (L293D) |
 | 16 | GPIO 16 | DEL rouge |
-| 18 | GPIO 18 | Servomoteur |
+| 17 | GPIO 17 | Keypad matrix |
+| 18 | GPIO 18 | Keypad matrix |
 | 19 | GPIO 19 | Contrôle moteur (L293D) |
 | 20 | GPIO 20 | DEL jaune |
 | 21 | GPIO 21 | DEL verte |
+| 22 | GPIO 22 | Keypad matrix |
+| 23 | GPIO 23 | Keypad matrix |
+| 24 | GPIO 24 | Keypad matrix |
+| 25 | GPIO 25 | Lecteur RFID |
 | 26 | GPIO 26 | Contrôle moteur (L293D) |
+| 27 | GPIO 27 | Keypad matrix |
 
 &nbsp;
 
@@ -206,5 +221,7 @@ J'ai ajouté de brèves descriptions aux [scripts](#scripts).
 J'ai importé les fichiers nécessaires au fonctionnement du lecteur RFID, que j'ai testé dans le script [rfid.py](./scripts/rfid.py).
 
 Après de nombreuses heures de recherches, de taponnage et de frustration, j'ai finalement réussi à faire fonctionner le lecteur RFID au sein du script [avion.py](./scripts/avion.py). Il a fallu que je *rollback* la librairie SPI-Py à une version antécédante, merci à [derweili](https://stackoverflow.com/questions/54847012/raspberry-pi-3b-and-rfid-rc522-python-typeerror) d'avoir publié ta réponse!
+
+J'ai poursuivi en ajoutant la matrice de boutons au montage et dans mon script.
 
 &nbsp;
