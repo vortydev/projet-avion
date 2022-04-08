@@ -245,8 +245,6 @@ def vibeCheckCard(cardID):
 def E1():
     print("E1: En attente\n")
     # impossible de contrôler les moteurs (DC et servo)
-    motorPWM.stop()
-    servoPWM.stop()
 
     toggleLED(rLED)
 
@@ -429,6 +427,11 @@ def loop():
     xBuffer = xVal
     zBuffer = time.localtime()
 
+    global motorPWM
+    global servoPWM
+    motorPWM.stop()
+    servoPWM.stop()
+
     updateConditions()
     while (True):
         
@@ -464,6 +467,10 @@ def loop():
             # Validation des conditions pour la mise à jour de l'état
             if C7 is True:
                 currentstate = "E1"
+                global motorPWM
+                global servoPWM
+                motorPWM.stop()
+                servoPWM.stop()
 
 # cleanup sequence
 def destroy():
