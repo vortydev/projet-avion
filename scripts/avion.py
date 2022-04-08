@@ -3,7 +3,7 @@
 # Description :     Programme principal du projet avion.
 # Auteur :          Étienne Ménard
 # Création :        2022/03/18
-# Modification :    2022/04/06
+# Modification :    2022/04/08
 ########################################################
 
 ########################
@@ -416,7 +416,7 @@ def updateConditions():
 
 
 def loop():
-    currentstate = "E2"
+    currentstate = "E1"
 
     mcp.output(3,1)     # turn on LCD backlight
     lcd.begin(16,2)     # set number of LCD lines and columns
