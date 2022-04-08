@@ -88,7 +88,8 @@ except:
 lcd = Adafruit_CharLCD(pin_rs=0, pin_e=2, pins_db=[4,5,6,7], GPIO=mcp)
 
 # Create an object of the class MFRC522
-mfrc = MFRC522.MFRC522()
+# mfrc = MFRC522.MFRC522()
+
 validCards = ["E993DB6ECF", "AAC2E4800C"]
 
 # keypad matrix
@@ -103,6 +104,17 @@ rowsPins = [4, 17, 27, 22]
 colsPins = [10, 18, 23, 24]
 
 keypad = Keypad.Keypad(keys, rowsPins, colsPins, ROWS, COLS)    # create Keypad object
+
+airports = {
+    101: "YUL Montréal",
+    111: "ATL Atlanta",
+    174: "CDG Paris",
+    222: "HND Tokyo",
+    492: "CAN Baiyin",
+    523: "AMS Amsterdam",
+    764: "LHR London",
+
+}
 
 
 
@@ -161,6 +173,8 @@ def setup():
     servoPWM = GPIO.PWM(servoPin, 50)       # set frequence to 50Hz
     motorPWM.start(0)
     servoPWM.start(0)
+
+    global mfrc
 
     # setup keypad matrix
     global keypad
@@ -236,11 +250,8 @@ def E1():
 
     toggleLED(rLED)
 
-    # clavier désactivé
-
-    # interrupteur désactivé
-
     # LCD affiche "Scannez la carte"
+    lcd.clear()
     lcd.setCursor(0,0)
     lcd.message("Scannez la carte")
 
@@ -280,27 +291,54 @@ def E1():
 def E2():
     global C3
     global C5
-    print("E2: Pré-vol\n")
+    # print("E2: Pré-vol\n")
     toggleLED(yLED)
 
+    lcd.clear()
     lcd.setCursor(0,0)
-    lcd.message("Entrez le code")
+    lcd.message("Entrez le code:\n")
     # entrer code de destination
     
+    isKeyb = True
+    code = ""
+    while (isKeyb):
+        key = keypad.getKey() #obtain the state of keys
 
-    key = keypad.getKey() #obtain the state of keys
-    if (key != keypad.NULL): #if there is key pressed, print its key code.
-        print("You Pressed Key : %c "%(key))
+        if (key == "#"):
+            isKeyb = False
+            C3 = True
+            updateConditions()
+        elif (key != keypad.NULL):
+            code += key
+            lcd.message(key)
 
+        if (len(code) == 3):
+            valid = False
+            for key in airports:
+                if (str(key) == code):
+                    valid = True
+                    isKeyb = False
+            if (not valid):
+                code = ""
+                sleep(0.25)
+                lcd.clear()
+                lcd.message("Code invalide!")
+                sleep(1)
+                lcd.clear()
+                lcd.message("Entrez le code:\n")
 
 
     # LCD affiche que l'on peut démarrer
+    lcd.clear()
+    lcd.message(airports[int(code)])
+    lcd.message("\nAttend PWR ON")
 
-    
-    if (GPIO.input(interrupteur) == 1):
-        C5 = True
-    else:
-        C5 = False
+    parked = True
+    while (parked):
+        if (GPIO.input(interrupteur) == 1):
+            C5 = True
+            updateConditions()
+            parked = False
 
 
 # prêt à voler
@@ -342,7 +380,7 @@ def updateConditions():
     C1 = not C2
 
     global C4
-    if C3 is False and C5 is False:
+    if C3 is False and C5 is True:
         C4 = True
     else:
         C4 = False
@@ -350,7 +388,7 @@ def updateConditions():
     global C6
     global C7
     C6 = not C7
-    C7 = not C5
+    # C7 = not C5
 
     # CONDITIONS    # VRAI SI
     # C1 = False      # C2 est false
@@ -360,11 +398,11 @@ def updateConditions():
     # C5 = False      # interrupteur PWR position "ON"
     # C6 = False      # C7 est false
     # C7 = False      # interrupteur PWR position "OFF"
-    print(C1, C2, C3, C4, C5, C6, C7)
+    # print(C1, C2, C3, C4, C5, C6, C7)
 
 
 def loop():
-    currentstate = "E1"
+    currentstate = "E2"
 
     mcp.output(3,1)     # turn on LCD backlight
     lcd.begin(16,2)     # set number of LCD lines and columns
@@ -385,14 +423,12 @@ def loop():
             updateConditions()
             if C2 is True:
                 currentstate = "E2"
-                lcd.clear()
 
         elif currentstate == "E2":
             E2()
             updateConditions()
             if C3 is True:
                 currentstate = "E1"
-                lcd.clear()
             elif C4 is True:
                 currentstate = "E3"
                 lcd.clear()

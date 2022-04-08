@@ -207,7 +207,7 @@ class MFRC522:
           i = 0
           while i<n:
             backData.append(self.Read_MFRC522(self.FIFODataReg))
-            i = i + 1;
+            i = i + 1
       else:
         status = self.MI_ERR
 
@@ -221,7 +221,7 @@ class MFRC522:
     
     self.Write_MFRC522(self.BitFramingReg, 0x07)
     
-    TagType.append(reqMode);
+    TagType.append(reqMode)
     (status,backData,backBits) = self.MFRC522_ToCard(self.PCD_TRANSCEIVE, TagType)
   
     if ((status != self.MI_OK) | (backBits != 0x10)):
@@ -258,7 +258,7 @@ class MFRC522:
   
   def CalulateCRC(self, pIndata):
     self.ClearBitMask(self.DivIrqReg, 0x04)
-    self.SetBitMask(self.FIFOLevelReg, 0x80);
+    self.SetBitMask(self.FIFOLevelReg, 0x80)
     i = 0
     while i<len(pIndata):
       self.Write_MFRC522(self.FIFODataReg, pIndata[i])

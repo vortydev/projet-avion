@@ -225,3 +225,9 @@ Après de nombreuses heures de recherches, de taponnage et de frustration, j'ai 
 J'ai poursuivi en ajoutant la matrice de boutons au montage et dans mon script.
 
 &nbsp;
+
+## Jeudi 07/04/2022
+
+### Sprint final
+
+Le montage est complété et le code à été écrit. Je pense que le projet est prêt pour la remise.
