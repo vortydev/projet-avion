@@ -106,15 +106,15 @@ colsPins = [10, 18, 23, 24]
 keypad = Keypad.Keypad(keys, rowsPins, colsPins, ROWS, COLS)    # create Keypad object
 
 airports = {
-    101: "YUL Montréal",
+    101: "YUL Montreal",
     111: "ATL Atlanta",
     174: "CDG Paris",
     222: "HND Tokyo",
     492: "CAN Baiyin",
     523: "AMS Amsterdam",
     764: "LHR London",
-
 }
+destination = ""
 
 
 
@@ -307,6 +307,7 @@ def E2():
         if (key == "#"):
             isKeyb = False
             C3 = True
+            code = "#"
             updateConditions()
         elif (key != keypad.NULL):
             code += key
@@ -318,6 +319,9 @@ def E2():
                 if (str(key) == code):
                     valid = True
                     isKeyb = False
+
+                    global destination
+                    destination = airports[int(code)]
             if (not valid):
                 code = ""
                 sleep(0.25)
@@ -328,17 +332,18 @@ def E2():
                 lcd.message("Entrez le code:\n")
 
 
-    # LCD affiche que l'on peut démarrer
-    lcd.clear()
-    lcd.message(airports[int(code)])
-    lcd.message("\nAttend PWR ON")
+    if (code != "#"):
+        # LCD affiche que l'on peut démarrer
+        lcd.clear()
+        lcd.message(destination)
+        lcd.message("\nAttend PWR ON")
 
-    parked = True
-    while (parked):
-        if (GPIO.input(interrupteur) == 1):
-            C5 = True
-            updateConditions()
-            parked = False
+        parked = True
+        while (parked):
+            if (GPIO.input(interrupteur) == 1):
+                C5 = True
+                updateConditions()
+                parked = False
 
 
 # prêt à voler
@@ -369,8 +374,17 @@ def E3(controls, xBuffer, yBuffer, zBuffer):
     lcd.setCursor(0,0) # set cursor position
     strY = str(vY).rjust(3, " ")
     strX = str(vX).rjust(3, " ")
-    lcd.message("Mtr:" + strY+ "% Ang:" + strX)
-    lcd.message("\nDestination: {}".format("POG"))
+    lcd.message("Mtr:" + strY+ "% Ang:" + strX + "\n")
+    lcd.message(destination)
+
+    if (GPIO.input(interrupteur) == 0):
+        global C5 
+        C5 = False
+
+        lcd.clear()
+        lcd.message("Buh-bye!")
+        sleep(1)
+        # updateConditions()
 
     data = [controls, xBuffer, yBuffer, zBuffer]
     return data
@@ -388,7 +402,7 @@ def updateConditions():
     global C6
     global C7
     C6 = not C7
-    # C7 = not C5
+    C7 = not C5
 
     # CONDITIONS    # VRAI SI
     # C1 = False      # C2 est false
@@ -408,7 +422,7 @@ def loop():
     lcd.begin(16,2)     # set number of LCD lines and columns
 
     # prêt à voler
-    controls = False    # start with locked controls
+    controls = True    # start with locked controls
     yVal = 128          # motor neutral state
     xVal = 128          # servo middle angle
     yBuffer = yVal
@@ -450,7 +464,6 @@ def loop():
             # Validation des conditions pour la mise à jour de l'état
             if C7 is True:
                 currentstate = "E1"
-                lcd.clear()
 
 # cleanup sequence
 def destroy():
