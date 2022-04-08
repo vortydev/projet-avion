@@ -466,14 +466,9 @@ def loop():
             # Validation des conditions pour la mise à jour de l'état
             if C7 is True:
                 currentstate = "E1"
-<<<<<<< HEAD
-                motorPWM.stop()
-                servoPWM.stop()
-=======
                 controls = False
                 servo(128)
                 motor(128)
->>>>>>> unfuck4
 
 # cleanup sequence
 def destroy():
