@@ -420,17 +420,17 @@ def loop():
     lcd.begin(16,2)     # set number of LCD lines and columns
 
     # prêt à voler
-    controls = True    # start with locked controls
+    controls = False     # start with locked controls
     yVal = 128          # motor neutral state
     xVal = 128          # servo middle angle
     yBuffer = yVal
     xBuffer = xVal
     zBuffer = time.localtime()
 
-    global motorPWM
-    global servoPWM
-    motorPWM.stop()
-    servoPWM.stop()
+    # global motorPWM
+    # global servoPWM
+    # motorPWM.stop()
+    # servoPWM.stop()
 
     updateConditions()
     while (True):
@@ -449,8 +449,7 @@ def loop():
             elif C4 is True:
                 currentstate = "E3"
                 lcd.clear()
-                motorPWM.start(0)
-                servoPWM.start(0)
+                controls = True
             sleep(0.1)
 
         elif currentstate == "E3":
@@ -467,8 +466,6 @@ def loop():
             # Validation des conditions pour la mise à jour de l'état
             if C7 is True:
                 currentstate = "E1"
-                global motorPWM
-                global servoPWM
                 motorPWM.stop()
                 servoPWM.stop()
 
